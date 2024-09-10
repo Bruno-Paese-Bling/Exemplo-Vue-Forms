@@ -26,26 +26,30 @@
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
+import type IProviderModal from './Contracts/IProviderModel.ts';
 import { watch } from 'vue';
-import { ref } from "vue";
+import { ref, PropType } from "vue";
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 
-const props = defineProps(['modelValue']);
+const model = defineModel({
+	required: true,
+	type: Object as PropType<IProviderModal>
+});
 
 const name = ref();
 const socialName = ref();
-const visible = ref(false)
+const visible = ref(false);
 
-watch(props, () => {
-	socialName.value = props.modelValue.socialName + ''
-	name.value = props.modelValue.name + ''
+watch(model, () => {
+	socialName.value = model.value.socialName + '';
+	name.value = model.value.name + '';
 })
 
 const show = () => {
-	visible.value = true
-	socialName.value = props.modelValue.socialName + ''
-	name.value = props.modelValue.name + ''
+	visible.value = true;
+	socialName.value = model.value.socialName ?? '';
+	name.value = model.value.name ?? '';
 }
 
 const saveInformation = () => {
@@ -53,7 +57,7 @@ const saveInformation = () => {
 	emit('update:modelValue', {
 		name: name.value,
 		socialName: socialName.value
-	})
+	} as IProviderModal);
 }
 
 </script>
